@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de los 4 Dígitos</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <script src="config.js"></script> <!-- Archivo donde configuras Firebase -->
+    <script src="game.js" defer></script> <!-- Tu script principal -->
+</head>
+<body>
+    <div id="auth">
+        <!-- Contenido de autenticación -->
+    </div>
+    <div id="chat">
+        <!-- Contenido del chat -->
+    </div>
+    <div id="game" style="display: none;">
+        <h1>Juego de los 4 Dígitos</h1>
+        <div id="player1">
+            <input type="text" id="name1" placeholder="Jugador 1 Nombre">
+            <input type="text" id="number1" placeholder="Número de 4 dígitos">
+        </div>
+        <div id="player2">
+            <input type="text" id="name2" placeholder="Jugador 2 Nombre">
+            <input type="text" id="number2" placeholder="Número de 4 dígitos">
+        </div>
+        <button onclick="startGame()">Iniciar Juego</button>
+        <div id="gameArea" style="display:none;">
+            <h2 id="turnIndicator"></h2>
+            <input type="text" id="guess" placeholder="Adivina el número">
+            <button onclick="makeGuess()">Adivinar</button>
+            <div id="result"></div>
+        </div>
+    </div>
+</body>
+</html>
