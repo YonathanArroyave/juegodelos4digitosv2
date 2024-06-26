@@ -4,18 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de los 4 Dígitos</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-    <script src="config.js"></script> <!-- Archivo donde configuras Firebase -->
-    <script src="game.js" defer></script> <!-- Tu script principal -->
+    <script src="config.js"></script>
+    <script src="auth.js" defer></script> <!-- Manejo de autenticación -->
+    <script src="chat.js" defer></script> <!-- Manejo del chat -->
+    <script src="game.js" defer></script> <!-- Lógica del juego -->
 </head>
 <body>
     <div id="auth">
         <!-- Contenido de autenticación -->
+        <h2>Autenticación</h2>
+        <div id="login">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+        <div id="user-info" style="display: none;">
+            <span id="user-email"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
     </div>
     <div id="chat">
         <!-- Contenido del chat -->
+        <h2>Chat</h2>
+        <div id="messages"></div>
+        <input type="text" id="message" placeholder="Escribe un mensaje">
+        <button onclick="sendMessage()">Enviar</button>
     </div>
     <div id="game" style="display: none;">
         <h1>Juego de los 4 Dígitos</h1>

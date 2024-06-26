@@ -1,15 +1,4 @@
-// Configuración de Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-    // Tus credenciales de Firebase
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
+const gameRef = db.ref('game');
 
 let player1 = {name: '', number: '', guess: ''};
 let player2 = {name: '', number: '', guess: ''};
@@ -27,8 +16,11 @@ function startGame() {
         return;
     }
 
-    set(ref(db, 'game/player1'), player1);
-    set(ref(db, 'game/player2'), player2);
+    gameRef.set({
+        player1: player1,
+        player2: player2,
+        currentPlayer: 1
+    });
 
     document.getElementById('gameArea').style.display = 'block';
     gameStarted = true;
@@ -60,12 +52,18 @@ function makeGuess() {
     if (currentPlayer === 1) {
         player1.guess = guess;
         checkGuess(player1.guess, player2.number);
-        set(ref(db, 'game/player1/guess'), guess);
+        gameRef.update({
+            'player1/guess': guess,
+            currentPlayer: 2
+        });
         currentPlayer = 2;
     } else {
         player2.guess = guess;
         checkGuess(player2.guess, player1.number);
-        set(ref(db, 'game/player2/guess'), guess);
+        gameRef.update({
+            'player2/guess': guess,
+            currentPlayer: 1
+        });
         currentPlayer = 1;
     }
     updateTurnIndicator();
@@ -84,20 +82,12 @@ function checkGuess(guess, actualNumber) {
     document.getElementById('result').textContent = `Aciertos: ${correctDigits}, Posiciones Correctas: ${correctPositions}`;
 }
 
-// Firebase Authentication Listener
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        document.getElementById('game').style.display = 'block';
-        // Escuchar cambios en la base de datos
-        onValue(ref(db, 'game'), (snapshot) => {
-            const data = snapshot.val();
-            if (data && gameStarted) {
-                player1 = data.player1;
-                player2 = data.player2;
-                updateTurnIndicator();
-            }
-        });
-    } else {
-        document.getElementById('game').style.display = 'none';
+gameRef.on('value', snapshot => {
+    const data = snapshot.val();
+    if (data && gameStarted) {
+        player1 = data.player1;
+        player2 = data.player2;
+        currentPlayer = data.currentPlayer;
+        updateTurnIndicator();
     }
 });
